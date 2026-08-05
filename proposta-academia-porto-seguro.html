@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposta Comercial — Gestão de Tráfego Pago & Conteúdo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0a0a0b;
+    --surface:#141415;
+    --surface-2:#1c1c1e;
+    --red:#e10600;
+    --red-dark:#8f0500;
+    --white:#f7f5f2;
+    --gray:#8f8f93;
+    --line:rgba(247,245,242,0.12);
+    --line-strong:rgba(247,245,242,0.22);
+    --display: 'Anton', sans-serif;
+    --body: 'Inter', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--white);
+    font-family:var(--body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--red); color:var(--white);}
+  a{color:inherit;}
+  img{max-width:100%; display:block;}
+
+  .wrap{max-width:1120px; margin:0 auto; padding:0 24px;}
+  @media(min-width:720px){ .wrap{padding:0 48px;} }
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--red);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px; height:1px; background:var(--red);
+    display:inline-block;
+  }
+
+  h1,h2,h3{ font-family:var(--display); text-transform:uppercase; letter-spacing:.005em; }
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 24px;
+    background:linear-gradient(to bottom, rgba(10,10,11,.9), transparent);
+    backdrop-filter:blur(2px);
+  }
+  @media(min-width:720px){ .topbar{padding:22px 48px;} }
+  .mark{
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--mono); font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+  }
+  .mark .dot{width:8px; height:8px; background:var(--red); border-radius:50%; box-shadow:0 0 0 3px rgba(225,6,0,.2);}
+  .topbar .clock{ font-family:var(--mono); font-size:12px; color:var(--gray); letter-spacing:.05em;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    min-height:100svh;
+    display:flex; flex-direction:column; justify-content:flex-end;
+    position:relative;
+    padding-top:120px;
+    padding-bottom:56px;
+    border-bottom:1px solid var(--line);
+    background:
+      radial-gradient(circle at 85% 8%, rgba(225,6,0,.18), transparent 45%),
+      repeating-linear-gradient(115deg, rgba(247,245,242,.025) 0px, rgba(247,245,242,.025) 1px, transparent 1px, transparent 64px);
+  }
+  .hero-track{
+    position:absolute; top:0; left:0; right:0; height:120px;
+    display:flex; align-items:center;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+    white-space:nowrap;
+  }
+  .hero-track span{
+    font-family:var(--display);
+    font-size:15px;
+    letter-spacing:.3em;
+    color:var(--gray);
+    padding-right:40px;
+    animation: ticker 26s linear infinite;
+    display:inline-block;
+  }
+  @keyframes ticker{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+
+  .hero h1{
+    font-size:clamp(46px, 12vw, 128px);
+    line-height:.94;
+    letter-spacing:-.01em;
+  }
+  .hero h1 .l2{ color:var(--red); }
+  .hero-sub{
+    max-width:560px;
+    margin-top:22px;
+    color:#d8d6d2;
+    font-size:17px;
+  }
+  .hero-meta{
+    margin-top:40px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px 24px;
+    border-top:1px solid var(--line);
+    padding-top:20px;
+    max-width:620px;
+  }
+  @media(min-width:640px){ .hero-meta{grid-template-columns:repeat(4,1fr);} }
+  .hero-meta div span{display:block;}
+  .hero-meta .k{font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--gray); margin-bottom:6px;}
+  .hero-meta .v{font-size:14px; font-weight:600;}
+
+  /* ---------- Section shell ---------- */
+  section{ padding:96px 0; border-bottom:1px solid var(--line); position:relative;}
+  .section-head{ margin-bottom:48px; max-width:680px;}
+  .section-head h2{ font-size:clamp(30px,6vw,52px); margin-top:14px; line-height:1;}
+  .section-head p{ color:var(--gray); margin-top:16px; font-size:16px; max-width:560px;}
+
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+
+  /* ---------- Diagnóstico ---------- */
+  .diag-grid{ display:grid; gap:1px; background:var(--line); border:1px solid var(--line); grid-template-columns:1fr; }
+  @media(min-width:760px){ .diag-grid{grid-template-columns:repeat(3,1fr);} }
+  .diag-card{ background:var(--ink); padding:32px 28px; }
+  .diag-card .num{ font-family:var(--mono); color:var(--red); font-size:13px; letter-spacing:.1em;}
+  .diag-card h3{ font-family:var(--body); font-weight:700; text-transform:none; font-size:18px; margin-top:14px; letter-spacing:0;}
+  .diag-card p{ color:var(--gray); font-size:14.5px; margin-top:10px; }
+
+  /* ---------- Circuito / estações ---------- */
+  .stations{ display:flex; flex-direction:column; }
+  .station{
+    display:grid; grid-template-columns:64px 1fr; gap:4px 20px;
+    padding:26px 0; border-top:1px solid var(--line);
+    align-items:start;
+  }
+  .station:last-child{ border-bottom:1px solid var(--line); }
+  .station .id{ grid-column:1; grid-row:1; font-family:var(--display); font-size:34px; color:var(--surface-2); -webkit-text-stroke:1px var(--line-strong); }
+  .station.bonus .id{ color:var(--red); -webkit-text-stroke:0;}
+  .station .s-title{ grid-column:2; grid-row:1; }
+  .station h3{ font-family:var(--body); font-weight:700; font-size:16.5px; text-transform:none; letter-spacing:0; }
+  .station .tag{ display:inline-block; margin-left:8px; font-family:var(--mono); font-size:10px; color:var(--red); border:1px solid var(--red); padding:2px 8px; border-radius:99px; letter-spacing:.08em; vertical-align:middle;}
+  .station p{ grid-column:2; grid-row:2; color:var(--gray); font-size:14.5px; margin-top:6px; max-width:520px; }
+  @media(min-width:760px){
+    .station{grid-template-columns:100px 220px 1fr; gap:0 28px;}
+    .station .s-title{grid-column:2; grid-row:1;}
+    .station p{grid-column:3; grid-row:1; margin-top:0;}
+  }
+
+  /* ---------- Cronograma ---------- */
+  .board{
+    display:grid; grid-template-columns:repeat(7,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line);
+  }
+  .board .day{ background:var(--ink); padding:18px 10px; min-height:130px; }
+  .board .day .d{ font-family:var(--mono); font-size:10px; color:var(--gray); letter-spacing:.1em;}
+  .board .day.active{ background:var(--surface); }
+  .board .day.active .d{ color:var(--red); }
+  .board .day .post{ margin-top:14px; font-size:11px; line-height:1.35; font-weight:600; }
+  .board .day .dot-row{ margin-top:10px; }
+  .board .day .pulse{ width:7px; height:7px; border-radius:50%; background:var(--red); display:inline-block; }
+  .legend{ display:flex; gap:24px; margin-top:20px; flex-wrap:wrap; }
+  .legend .li{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--gray); }
+  .legend .sq{ width:10px; height:10px; }
+
+  /* ---------- Circuito de expansão ---------- */
+  .units{ display:flex; flex-direction:column; gap:0; position:relative; }
+  .units::before{ content:""; position:absolute; left:19px; top:10px; bottom:10px; width:1px; background:var(--line-strong); }
+  @media(min-width:640px){ .units{flex-direction:row; align-items:stretch;} .units::before{left:0; right:0; top:19px; bottom:auto; height:1px; width:auto;} }
+  .unit{ position:relative; padding:0 0 32px 52px; flex:1; }
+  @media(min-width:640px){ .unit{padding:52px 24px 0 0;} }
+  .unit .pin{
+    position:absolute; left:0; top:0; width:40px; height:40px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--line-strong); background:var(--ink);
+    font-family:var(--mono); font-size:13px;
+  }
+  @media(min-width:640px){ .unit .pin{ left:0; } }
+  .unit.active .pin{ border-color:var(--red); color:var(--red); box-shadow:0 0 0 5px rgba(225,6,0,.12); }
+  .unit.next .pin{ border-style:dashed; color:var(--gray); }
+  .unit h3{ font-family:var(--body); font-weight:700; font-size:16px; text-transform:none; letter-spacing:0;}
+  .unit .status{ font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--gray); margin-top:4px; display:block;}
+  .unit.active .status{ color:var(--red); }
+  .unit p{ color:var(--gray); font-size:14px; margin-top:10px; max-width:280px; }
+
+  /* ---------- Painel / scoreboard ---------- */
+  .panel{
+    background:var(--surface); border:1px solid var(--line-strong); border-radius:4px;
+    padding:36px 24px;
+    display:grid; grid-template-columns:repeat(2,1fr); gap:28px 20px;
+  }
+  @media(min-width:760px){ .panel{grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); padding:44px;} }
+  .panel .stat .n{ font-family:var(--mono); font-size:clamp(28px,5vw,42px); font-weight:700; color:var(--white); }
+  .panel .stat .n .suf{ color:var(--red); }
+  .panel .stat .l{ margin-top:8px; font-size:12.5px; color:var(--gray); line-height:1.4; }
+
+  /* ---------- Treinador / autoridade ---------- */
+  .coach{ display:grid; gap:36px; grid-template-columns:1fr; }
+  @media(min-width:800px){ .coach{ grid-template-columns:1fr 1fr; align-items:start;} }
+  .card-record{ background:var(--surface); border:1px solid var(--line-strong); padding:28px; }
+  .card-record .row{ display:flex; justify-content:space-between; padding:14px 0; border-top:1px solid var(--line); font-size:14.5px; }
+  .card-record .row:first-child{ border-top:none; }
+  .card-record .row .k{ color:var(--gray); }
+  .card-record .row .v{ font-family:var(--mono); font-weight:600; text-align:right; }
+  .coach-copy p{ color:#d8d6d2; font-size:15.5px; margin-bottom:14px; }
+  .coach-copy strong{ color:var(--white); }
+
+  /* ---------- Investimento ---------- */
+  .invest-card{
+    border:1px solid var(--red); background:linear-gradient(160deg, rgba(225,6,0,.08), transparent 60%);
+    padding:36px 24px;
+  }
+  @media(min-width:760px){ .invest-card{padding:48px;} }
+  .price-row{ display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
+  .price-old{ font-family:var(--mono); color:var(--gray); text-decoration:line-through; font-size:18px; }
+  .price-new{ font-family:var(--display); font-size:clamp(48px,9vw,84px); line-height:1; }
+  .price-new .cents{ font-size:28px; vertical-align:top; }
+  .price-note{ font-family:var(--mono); font-size:12px; color:var(--red); letter-spacing:.06em; text-transform:uppercase; margin-top:6px;}
+  .included{ margin-top:32px; display:grid; gap:12px; grid-template-columns:1fr; }
+  @media(min-width:640px){ .included{grid-template-columns:1fr 1fr;} }
+  .included .it{ display:flex; gap:10px; font-size:14.5px; color:#d8d6d2; align-items:flex-start;}
+  .included .it .ck{ color:var(--red); font-family:var(--mono); flex-shrink:0; }
+  .bonus-badge{ display:inline-flex; align-items:center; gap:8px; margin-top:28px; border:1px dashed var(--red); padding:10px 16px; font-family:var(--mono); font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--red);}
+  .fineprint{ margin-top:24px; font-size:12.5px; color:var(--gray); line-height:1.6; border-top:1px solid var(--line); padding-top:20px;}
+
+  /* ---------- CTA ---------- */
+  .cta{ text-align:left; padding:110px 0 90px; border-bottom:none;}
+  .cta h2{ font-size:clamp(34px,8vw,72px); line-height:1; }
+  .cta p{ color:var(--gray); max-width:520px; margin-top:18px; font-size:16px; }
+  .stamp{
+    display:inline-flex; align-items:center; gap:10px; margin-top:40px;
+    font-family:var(--mono); font-size:12.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--red);
+    border:2px solid var(--red); padding:14px 22px; transform:rotate(-1.5deg);
+  }
+
+  footer{ padding:36px 0 60px; }
+  footer .wrap{ display:flex; flex-direction:column; gap:14px; }
+  @media(min-width:640px){ footer .wrap{flex-direction:row; justify-content:space-between; align-items:center;} }
+  footer .f-mark{ font-family:var(--mono); font-size:12px; color:var(--gray); letter-spacing:.05em;}
+  footer .f-mark b{ color:var(--white); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="mark"><span class="dot"></span> YADS · GESTÃO DE TRÁFEGO</div>
+  <div class="clock" id="clock">PORTO SEGURO — BA</div>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-track" aria-hidden="true">
+    <span>GOOGLE ADS &nbsp;•&nbsp; META ADS &nbsp;•&nbsp; CONTEÚDO &nbsp;•&nbsp; TIKTOK ORGÂNICO &nbsp;•&nbsp; 2 UNIDADES + EXPANSÃO &nbsp;•&nbsp; GOOGLE ADS &nbsp;•&nbsp; META ADS &nbsp;•&nbsp; CONTEÚDO &nbsp;•&nbsp; TIKTOK ORGÂNICO &nbsp;•&nbsp; 2 UNIDADES + EXPANSÃO &nbsp;•&nbsp;</span>
+  </div>
+  <div class="wrap">
+    <div class="eyebrow reveal">PROPOSTA COMERCIAL · TRÁFEGO PAGO &amp; CONTEÚDO</div>
+    <h1 style="margin-top:18px;" class="reveal">CADA REP CONTA.<br><span class="l2">CADA LEAD TAMBÉM.</span></h1>
+    <p class="hero-sub reveal">Uma proposta de gestão de tráfego pago, presença local e conteúdo para levar suas duas unidades — e a que vem por aí — para o próximo nível em Porto Seguro.</p>
+    <div class="hero-meta reveal">
+      <div><span class="k">Preparado para</span><span class="v">Mateus Guimarães</span></div>
+      <div><span class="k">Preparado por</span><span class="v">Ygor Matos — YADS</span></div>
+      <div><span class="k">Unidades</span><span class="v">02 ativas + 01 em expansão</span></div>
+      <div><span class="k">Validade da proposta</span><span class="v">7 dias</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- DIAGNÓSTICO -->
+<section id="diagnostico">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">O CENÁRIO</div>
+      <h2>Duas unidades rodando.<br>Uma expansão pela frente.</h2>
+      <p>Porto Seguro tem público local fixo e um fluxo turístico constante — dois motores de captação que só funcionam com presença digital estruturada e consistente, não com posts avulsos.</p>
+    </div>
+    <div class="diag-grid reveal">
+      <div class="diag-card">
+        <div class="num">A</div>
+        <h3>Presença fragmentada</h3>
+        <p>Sem conta de anúncios estruturada, cada unidade compete sozinha por atenção — e a marca perde força de conjunto.</p>
+      </div>
+      <div class="diag-card">
+        <div class="num">B</div>
+        <h3>Expansão exige método</h3>
+        <p>Abrir a terceira unidade sem um sistema de captação replicável significa recomeçar do zero a cada endereço novo.</p>
+      </div>
+      <div class="diag-card">
+        <div class="num">C</div>
+        <h3>Conteúdo sem constância</h3>
+        <p>Aparecer de vez em quando não constrói autoridade. Cadência fixa é o que transforma seguidor em aluno.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ESTAÇÕES DO TREINO -->
+<section id="escopo">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">O CIRCUITO</div>
+      <h2>Seis estações. Um único método.</h2>
+      <p>Cada etapa constrói a base para a próxima — da estrutura técnica das contas até o conteúdo que roda toda semana.</p>
+    </div>
+    <div class="stations reveal">
+      <div class="station">
+        <div class="id">01</div>
+        <div class="s-title"><h3>Google Meu Negócio</h3></div>
+        <p>Configuração e otimização do perfil de cada unidade — a base para aparecer bem no Google e no Maps quando alguém pesquisa academia perto de você.</p>
+      </div>
+      <div class="station">
+        <div class="id">02</div>
+        <div class="s-title"><h3>Estruturação da conta Google Ads</h3></div>
+        <p>Configuração técnica da conta, conversões e públicos, pronta para rodar campanha com rastreamento correto desde o primeiro clique.</p>
+      </div>
+      <div class="station">
+        <div class="id">03</div>
+        <div class="s-title"><h3>Estruturação da conta Meta Ads</h3></div>
+        <p>Configuração da conta e dos eventos de conversão para Facebook e Instagram, com públicos definidos para geração de leads.</p>
+      </div>
+      <div class="station">
+        <div class="id">04</div>
+        <div class="s-title"><h3>Campanhas de performance</h3></div>
+        <p>Criação e gestão contínua das campanhas no Google Ads e Meta Ads, com foco em geração de leads para matrícula.</p>
+      </div>
+      <div class="station">
+        <div class="id">05</div>
+        <div class="s-title"><h3>Conteúdo &amp; criativos</h3></div>
+        <p>Edição de vídeo e criativos para os anúncios, além de posts autorais para o Instagram — publicados toda segunda e quarta.</p>
+      </div>
+      <div class="station bonus">
+        <div class="id">06</div>
+        <div class="s-title"><h3>TikTok orgânico <span class="tag">bônus</span></h3></div>
+        <p>Reaproveitamento do conteúdo produzido para o Instagram, adaptado e publicado organicamente no TikTok — sem custo adicional.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CRONOGRAMA -->
+<section id="cronograma">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">QUADRO DA SEMANA</div>
+      <h2>Cadência fixa. Sem depender de lembrança.</h2>
+      <p>Instagram com dia certo para postar. TikTok rodando por trás, de forma orgânica, com o mesmo material.</p>
+    </div>
+    <div class="board reveal">
+      <div class="day active"><span class="d">SEG</span><div class="post">Post no Instagram</div><div class="dot-row"><span class="pulse"></span></div></div>
+      <div class="day"><span class="d">TER</span></div>
+      <div class="day active"><span class="d">QUA</span><div class="post">Post no Instagram</div><div class="dot-row"><span class="pulse"></span></div></div>
+      <div class="day"><span class="d">QUI</span></div>
+      <div class="day"><span class="d">SEX</span></div>
+      <div class="day"><span class="d">SÁB</span></div>
+      <div class="day"><span class="d">DOM</span></div>
+    </div>
+    <div class="legend">
+      <div class="li"><span class="sq" style="background:var(--red)"></span> Publicação programada no Instagram</div>
+      <div class="li"><span class="sq" style="background:var(--surface-2); border:1px solid var(--line-strong)"></span> TikTok orgânico, contínuo, conforme material disponível</div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPANSÃO -->
+<section id="expansao">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">CIRCUITO DE EXPANSÃO</div>
+      <h2>As duas unidades. E a próxima.</h2>
+      <p>A gestão já nasce pensada para escalar — quando a terceira unidade abrir, ela entra no mesmo método, sem reconstruir do zero.</p>
+    </div>
+    <div class="units reveal">
+      <div class="unit active">
+        <div class="pin">01</div>
+        <h3>Unidade 01</h3>
+        <span class="status">Ativa</span>
+        <p>Perfil, campanhas e conteúdo sob gestão contínua.</p>
+      </div>
+      <div class="unit active">
+        <div class="pin">02</div>
+        <h3>Unidade 02</h3>
+        <span class="status">Ativa</span>
+        <p>Mesmo padrão de campanhas e cadência de conteúdo da unidade 01.</p>
+      </div>
+      <div class="unit next">
+        <div class="pin">03</div>
+        <h3>Unidade 03</h3>
+        <span class="status">Em expansão</span>
+        <p>Entra no mesmo método assim que abrir — gestão já inclusa nesta proposta.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAINEL -->
+<section id="painel">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">FICHA TÉCNICA</div>
+      <h2>Quem vai treinar a gestão de vocês.</h2>
+    </div>
+    <div class="panel reveal">
+      <div class="stat"><div class="n" data-count="2021" data-suffix="">2021</div><div class="l">Atuando com tráfego pago e e-commerce desde</div></div>
+      <div class="stat"><div class="n"><span data-count="2">0</span><span class="suf">M+</span></div><div class="l">Em verba de tráfego gerenciada por mês, hoje</div></div>
+      <div class="stat"><div class="n" data-count="8" data-suffix="">0</div><div class="l">Clientes ativos sob gestão atualmente</div></div>
+      <div class="stat"><div class="n" data-count="1" data-suffix=" ano">0</div><div class="l">Atuando na V4, agência de performance</div></div>
+      <div class="stat"><div class="n" data-count="100" data-suffix="%">0</div><div class="l">Dedicação hoje à própria empresa, a YADS</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TREINADOR -->
+<section id="sobre">
+  <div class="wrap">
+    <div class="coach">
+      <div class="reveal">
+        <div class="eyebrow">SEU TREINADOR</div>
+        <h2 style="font-size:clamp(28px,5vw,44px); margin-top:14px;">Ygor Matos</h2>
+        <div class="coach-copy" style="margin-top:18px;">
+          <p>Atuo com <strong>tráfego pago e gestão de e-commerce desde 2021</strong>. Passei quase um ano na <strong>V4</strong>, agência de performance, e saí para me dedicar 100% à minha própria operação, a <strong>YADS</strong>.</p>
+          <p>Hoje gerencio <strong>8 clientes ativos</strong> e cerca de <strong>R$2 milhões por mês em verba de tráfego pago</strong> — e trato conta de academia com o mesmo rigor técnico que trato conta de e-commerce: rastreamento correto, público certo, sem achismo.</p>
+        </div>
+      </div>
+      <div class="card-record reveal">
+        <div class="row"><span class="k">Atuação</span><span class="v">Tráfego pago &amp; conteúdo</span></div>
+        <div class="row"><span class="k">Desde</span><span class="v">2021</span></div>
+        <div class="row"><span class="k">Passagem</span><span class="v">V4 (Agência)</span></div>
+        <div class="row"><span class="k">Verba gerida/mês</span><span class="v">R$ 2M+</span></div>
+        <div class="row"><span class="k">Clientes ativos</span><span class="v">8</span></div>
+        <div class="row"><span class="k">Plataformas</span><span class="v">Google Ads / Meta Ads</span></div>
+        <div class="row"><span class="k">Operação</span><span class="v">YADS</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INVESTIMENTO -->
+<section id="investimento">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">INVESTIMENTO</div>
+      <h2>Condição de parceria.</h2>
+      <p>Um valor pensado para o início de uma relação que pode crescer para outras frentes do seu negócio.</p>
+    </div>
+    <div class="invest-card reveal">
+      <div class="price-row">
+        <span class="price-old">R$ 2.000</span>
+        <span class="price-new">R$ 1.800<span class="cents">/mês</span></span>
+      </div>
+      <div class="price-note">Condição especial de parceria — gestão das 2 unidades + expansão</div>
+
+      <div class="included">
+        <div class="it"><span class="ck">＋</span> Configuração do Google Meu Negócio (todas as unidades)</div>
+        <div class="it"><span class="ck">＋</span> Estruturação da conta Google Ads</div>
+        <div class="it"><span class="ck">＋</span> Estruturação da conta Meta Ads</div>
+        <div class="it"><span class="ck">＋</span> Gestão contínua de campanhas nas duas plataformas</div>
+        <div class="it"><span class="ck">＋</span> Edição de criativos e conteúdo para os anúncios</div>
+        <div class="it"><span class="ck">＋</span> 2 posts autorais por semana no Instagram (seg. e qua.)</div>
+        <div class="it"><span class="ck">＋</span> Gestão já inclusa para a 3ª unidade, quando abrir</div>
+      </div>
+
+      <div class="bonus-badge">✕ TikTok orgânico incluso, sem custo adicional</div>
+
+      <div class="fineprint">Valor referente à gestão e produção. Verba de mídia investida em anúncios (Google Ads e Meta Ads) é definida à parte, conforme a meta de leads combinada, e paga diretamente às plataformas.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="wrap">
+    <div class="eyebrow reveal">STATUS</div>
+    <h2 class="reveal" style="margin-top:16px;">Já alinhado. Bora começar.</h2>
+    <p class="reveal">Depois da nossa conversa, ficou definido: a gestão começa pela unidade 01 — Google Meu Negócio e contas de anúncio primeiro, campanhas e conteúdo logo em seguida.</p>
+    <div class="stamp reveal">✓ PROPOSTA ALINHADA EM REUNIÃO — MATEUS GUIMARÃES</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-mark"><b>YADS</b> — Ygor Matos · Gestão de Tráfego Pago</div>
+    <div class="f-mark">Proposta gerada para Mateus Guimarães · Porto Seguro/BA</div>
+  </div>
+</footer>
+
+<script>
+  // Live clock in top bar
+  const clockEl = document.getElementById('clock');
+  function tick(){
+    const now = new Date();
+    const t = now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+    clockEl.textContent = 'PORTO SEGURO — BA · ' + t;
+  }
+  tick(); setInterval(tick, 30000);
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  }, {threshold:0.12});
+  revealEls.forEach(el=>io.observe(el));
+
+  // Count-up numbers in panel
+  const counters = document.querySelectorAll('.panel .n');
+  const cio = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(!entry.isIntersecting) return;
+      const el = entry.target;
+      cio.unobserve(el);
+      const targetAttrEl = el.dataset.count ? el : el.querySelector('[data-count]');
+      if(!targetAttrEl) return;
+      const target = parseInt(targetAttrEl.dataset.count, 10);
+      const suffix = targetAttrEl.dataset.suffix || '';
+      const isYear = target > 1900 && target < 2100;
+      let cur = 0;
+      const steps = 36;
+      const inc = target/steps;
+      const timer = setInterval(()=>{
+        cur += inc;
+        if(cur >= target){ cur = target; clearInterval(timer); }
+        targetAttrEl.textContent = (isYear ? Math.round(cur) : Math.round(cur)) + (targetAttrEl === el ? suffix : '');
+      }, 22);
+    });
+  }, {threshold:0.4});
+  document.querySelectorAll('.panel .stat').forEach(el=>cio.observe(el));
+</script>
+
+</body>
+</html>
